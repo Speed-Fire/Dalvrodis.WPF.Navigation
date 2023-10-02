@@ -51,21 +51,22 @@ namespace Synergy.WPF.Navigation.Services.Local
                 if (!constructor.IsPublic)
                     continue;
 
-                if(CompareConstructorParameters(constructor.GetParameters(), prms))
+                if (CompareConstructorParameters(constructor.GetParameters().Select(p => p.ParameterType).ToArray(),
+                    prms))
                     return constructor;
             }
 
             throw new InvalidOperationException("There is no suitable constructor for specified parameters!");
         }
 
-        private bool CompareConstructorParameters(object[] prms1, object[] prms2)
+        private bool CompareConstructorParameters(Type[] prms1, object[] prms2)
         {
             if(prms1.Length != prms2.Length)
                 return false;
 
             for(int i = 0; i < prms1.Length; i++)
             {
-                if (prms1[i].GetType() != prms2[i].GetType())
+                if (!prms1[i].IsAssignableFrom(prms2[i].GetType()))
                     return false;
             }
 
