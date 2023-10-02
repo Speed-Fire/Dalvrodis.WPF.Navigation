@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Synergy.WPF.Navigation.ViewModels
 {
-    public abstract class ViewModel : ObservableObject
+    public abstract class ViewModel : ObservableRecipient
     {
     }
 }
