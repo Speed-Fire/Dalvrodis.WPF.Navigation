@@ -14,7 +14,7 @@ namespace Synergy.WPF.Navigation.Extensions
 {
     public static class DIExtensions
     {
-        public static IServiceCollection RegisterNavigation(this IServiceCollection services)
+        public static IServiceCollection RegisterSynergyWPFNavigation(this IServiceCollection services)
         {
             services
                 .AddSingleton<INavigationService, NavigationService>()
