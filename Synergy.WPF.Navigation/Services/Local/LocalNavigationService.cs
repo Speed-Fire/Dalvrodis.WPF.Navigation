@@ -11,14 +11,33 @@ namespace Synergy.WPF.Navigation.Services.Local
 {
     public class LocalNavigationService : ObservableObject, ILocalNavigationService
     {
-        private ViewModel? _currentView;
+		private readonly Func<Type, ViewModel> _viewModelFactory;
+
+		private ViewModel? _currentView;
         public ViewModel? CurrentView
         {
             get => _currentView;
-            private set => SetProperty(ref _currentView, value);
+            private set
+            {
+                if(_currentView != value)
+                    _currentView?.Dispose();
+
+                SetProperty(ref _currentView, value);
+			}
         }
 
-        public void NavigateTo<TViewModel>(params object[] prms) where TViewModel : ViewModel
+        public LocalNavigationService(Func<Type, ViewModel> viewModelFactory)
+        {
+            _viewModelFactory = viewModelFactory;
+		}
+
+		public void NavigateToDI<TViewModel>() where TViewModel : ViewModel
+		{
+			var vm = _viewModelFactory?.Invoke(typeof(TViewModel));
+			CurrentView = vm;
+		}
+
+		public void NavigateTo<TViewModel>(params object[] prms) where TViewModel : ViewModel
         {
             var constructor = GetSuitableConstructor<TViewModel>(prms);
 
@@ -72,5 +91,5 @@ namespace Synergy.WPF.Navigation.Services.Local
 
             return true;
         }
-    }
+	}
 }

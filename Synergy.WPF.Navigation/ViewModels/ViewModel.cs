@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Synergy.WPF.Navigation.ViewModels
 {
-    public abstract class ViewModel : ObservableRecipient
-    {
-    }
+	public abstract class ViewModel : ObservableRecipient, IDisposable
+	{
+		public virtual void Dispose() { }
+	}
 }

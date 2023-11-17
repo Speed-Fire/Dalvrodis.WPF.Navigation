@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 
 namespace Synergy.WPF.Navigation.ViewModels
 {
@@ -7,6 +8,23 @@ namespace Synergy.WPF.Navigation.ViewModels
 		[ObservableProperty]
 		private bool? _dialogResult;
 
-		public virtual void ConfigureWindow(System.Windows.Window window) { }
+		public void ConfigureWindow(System.Windows.Window window)
+		{
+			if(window == null)
+				throw new ArgumentNullException(nameof(window));
+
+			EventHandler? closedHandler = null;
+			closedHandler = (sender, e) =>
+			{
+				this.Dispose();
+
+				window.Closed -= closedHandler;
+			};
+			window.Closed += closedHandler;
+
+			ConfigureWindowInternal(window);
+		}
+
+		protected virtual void ConfigureWindowInternal(System.Windows.Window window) { }
 	}
 }

@@ -10,5 +10,6 @@ namespace Synergy.WPF.Navigation.Services.Local
     public interface ILocalNavigationService : INavigationService
     {
         void NavigateTo<TViewModel>(params object[] prms) where TViewModel : ViewModel;
+        void NavigateToDI<TViewModel>() where TViewModel : ViewModel;
     }
 }
