@@ -8,6 +8,8 @@ namespace Synergy.WPF.Navigation.ViewModels
 		[ObservableProperty]
 		private bool? _dialogResult;
 
+		public object? ReturnValue { get; protected set; }
+
 		public void ConfigureWindow(System.Windows.Window window)
 		{
 			if(window == null)
