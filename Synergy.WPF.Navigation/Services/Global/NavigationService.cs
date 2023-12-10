@@ -24,14 +24,21 @@ namespace Synergy.WPF.Navigation.Services.Global
             _viewModelFactory = viewModelFactory;
         }
 
-        void INavigationService.NavigateTo<TViewModel>()
+        void INavigationService.NavigateTo<TViewModel>(bool suppressDisposing)
         {
             var vm = _viewModelFactory?.Invoke(typeof(TViewModel));
-            CurrentView = vm;
+
+			if (CurrentView != null && !suppressDisposing)
+				CurrentView.Dispose();
+
+			CurrentView = vm;
         }
 
-        void INavigationService.NavigateTo(ViewModel viewModel)
+        void INavigationService.NavigateTo(ViewModel viewModel, bool suppressDisposing)
         {
+            if(CurrentView != null && !suppressDisposing)
+                CurrentView.Dispose();
+
             CurrentView = viewModel;
         }
     }

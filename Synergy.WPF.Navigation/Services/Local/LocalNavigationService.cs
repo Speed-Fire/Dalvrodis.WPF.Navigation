@@ -19,9 +19,6 @@ namespace Synergy.WPF.Navigation.Services.Local
             get => _currentView;
             private set
             {
-                if(_currentView != value)
-                    _currentView?.Dispose();
-
                 SetProperty(ref _currentView, value);
 			}
         }
@@ -31,29 +28,42 @@ namespace Synergy.WPF.Navigation.Services.Local
             _viewModelFactory = viewModelFactory;
 		}
 
-		public void NavigateToDI<TViewModel>() where TViewModel : ViewModel
+		public void NavigateToDI<TViewModel>(bool suppressDisposing) where TViewModel : ViewModel
 		{
 			var vm = _viewModelFactory?.Invoke(typeof(TViewModel));
+
+			if (CurrentView != null && !suppressDisposing)
+				CurrentView.Dispose();
+
 			CurrentView = vm;
 		}
 
-		public void NavigateTo<TViewModel>(params object[] prms) where TViewModel : ViewModel
+		public void NavigateTo<TViewModel>(bool suppressDisposing, params object[] prms) where TViewModel : ViewModel
         {
             var constructor = GetSuitableConstructor<TViewModel>(prms);
 
-            CurrentView = (ViewModel)constructor.Invoke(prms);
+			if (CurrentView != null && !suppressDisposing)
+				CurrentView.Dispose();
+
+			CurrentView = (ViewModel)constructor.Invoke(prms);
         }
 
-        public void NavigateTo<TViewModel>() where TViewModel : ViewModel
+        public void NavigateTo<TViewModel>(bool suppressDisposing) where TViewModel : ViewModel
         {
             var constructor = GetSuitableConstructor<TViewModel>(Array.Empty<object>());
 
-            CurrentView = (ViewModel)constructor.Invoke(null);
+			if (CurrentView != null && !suppressDisposing)
+				CurrentView.Dispose();
+
+			CurrentView = (ViewModel)constructor.Invoke(null);
         }
 
-        public void NavigateTo(ViewModel viewModel)
+        public void NavigateTo(ViewModel viewModel, bool suppressDisposing)
         {
-            CurrentView = viewModel;
+			if (CurrentView != null && !suppressDisposing)
+				CurrentView.Dispose();
+
+			CurrentView = viewModel;
         }
 
         private ConstructorInfo GetSuitableConstructor<T>(object[] prms)
