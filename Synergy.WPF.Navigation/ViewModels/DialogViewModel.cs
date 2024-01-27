@@ -3,12 +3,18 @@ using System;
 
 namespace Synergy.WPF.Navigation.ViewModels
 {
+#nullable disable
+	public partial class DialogViewModel<TReturn> : DialogViewModel
+	{
+		public TReturn ReturnValue { get; protected set; }
+	}
+#nullable enable
+
+
 	public partial class DialogViewModel : ViewModel
 	{
 		[ObservableProperty]
 		private bool? _dialogResult;
-
-		public object? ReturnValue { get; protected set; }
 
 		public void ConfigureWindow(System.Windows.Window window)
 		{
