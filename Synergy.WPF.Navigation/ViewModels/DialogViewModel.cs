@@ -13,6 +13,8 @@ namespace Synergy.WPF.Navigation.ViewModels
 
 	public partial class DialogViewModel : ViewModel
 	{
+		public string DialogNumber { get; set; } = "";
+
 		[ObservableProperty]
 		private bool? _dialogResult;
 
