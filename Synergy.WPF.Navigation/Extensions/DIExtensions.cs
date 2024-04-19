@@ -9,6 +9,11 @@ namespace Synergy.WPF.Navigation.Extensions
 {
 	public static class DIExtensions
 	{
+		/// <summary>
+		/// Register navigation.
+		/// </summary>
+		/// <param name="services"></param>
+		/// <returns></returns>
 		public static IServiceCollection RegisterSynergyWPFNavigation(this IServiceCollection services)
 		{
 			services
