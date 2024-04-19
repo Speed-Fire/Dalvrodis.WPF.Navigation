@@ -8,6 +8,7 @@
     <Title>WPF navigation</Title>
     <Authors>Synergy</Authors>
     <RepositoryUrl>https://github.com/Speed-Fire/Synergy.WPF.Navigation</RepositoryUrl>
+    <Description>This package contains services for navigation in WPF app, based on MVVM.</Description>
   </PropertyGroup>
 
   <ItemGroup>
