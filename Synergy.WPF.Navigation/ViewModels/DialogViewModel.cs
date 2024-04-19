@@ -20,7 +20,7 @@ namespace Synergy.WPF.Navigation.ViewModels
 
 		public void ConfigureWindow(System.Windows.Window window)
 		{
-			if(window == null)
+			if (window == null)
 				throw new ArgumentNullException(nameof(window));
 
 			EventHandler? closedHandler = null;
