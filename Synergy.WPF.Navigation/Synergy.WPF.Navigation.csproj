@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -12,8 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
   </ItemGroup>
 
 </Project>
