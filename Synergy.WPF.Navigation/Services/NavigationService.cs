@@ -2,7 +2,7 @@
 using Synergy.WPF.Navigation.ViewModels;
 using System;
 
-namespace Synergy.WPF.Navigation.Services.Global
+namespace Synergy.WPF.Navigation.Services
 {
 	/// <summary>
 	/// Implementation of navigation service. Uses DI to retrieve viewmodels.
@@ -16,7 +16,7 @@ namespace Synergy.WPF.Navigation.Services.Global
 		/// <summary>
 		/// Current viewmodel.
 		/// </summary>
-		public ViewModel? CurrentView
+		public ViewModel? CurrentViewModel
 		{
 			get => _currentView;
 			private set => SetProperty(ref _currentView, value);
@@ -37,10 +37,12 @@ namespace Synergy.WPF.Navigation.Services.Global
 		{
 			var vm = _viewModelFactory?.Invoke(typeof(TViewModel));
 
-			if (CurrentView != null && !suppressDisposing)
-				CurrentView.Dispose();
+			if (CurrentViewModel != null && !suppressDisposing)
+				CurrentViewModel.Dispose();
 
-			CurrentView = vm;
+			vm?.SetNavigation(this);
+
+			CurrentViewModel = vm;
 		}
 
 		/// <summary>
@@ -51,10 +53,12 @@ namespace Synergy.WPF.Navigation.Services.Global
 		/// before setting new.</param>
 		void INavigationService.NavigateTo(ViewModel viewModel, bool suppressDisposing)
 		{
-			if (CurrentView != null && !suppressDisposing)
-				CurrentView.Dispose();
+			if (CurrentViewModel != null && !suppressDisposing)
+				CurrentViewModel.Dispose();
 
-			CurrentView = viewModel;
+			viewModel?.SetNavigation(this);
+
+			CurrentViewModel = viewModel;
 		}
 	}
 }

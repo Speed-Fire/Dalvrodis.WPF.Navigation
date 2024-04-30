@@ -1,16 +1,17 @@
 ﻿using Synergy.WPF.Navigation.ViewModels;
+using System.ComponentModel;
 
 namespace Synergy.WPF.Navigation.Services
 {
 	/// <summary>
 	/// Interface for providing navigation.
 	/// </summary>
-	public interface INavigationService
+	public interface INavigationService : INotifyPropertyChanged
 	{
 		/// <summary>
 		/// Current viewmodel.
 		/// </summary>
-		ViewModel? CurrentView { get; }
+		ViewModel? CurrentViewModel { get; }
 
 		/// <summary>
 		/// Navigates to viewmodel via type.

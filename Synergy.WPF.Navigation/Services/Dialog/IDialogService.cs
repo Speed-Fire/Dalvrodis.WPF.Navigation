@@ -5,16 +5,22 @@ namespace Synergy.WPF.Navigation.Services.Dialog
 	/// <summary>
 	/// Dialog close callback.
 	/// </summary>
-	/// <param name="result">Dialog result.</param>
 	/// <param name="returnValue">Dialog return value.</param>
-	public delegate void DialogCallback(bool? result, object? returnValue = null);
+	public delegate void DialogCallback<T>(DReturnValue<T> returnValue);
+
+	/// <summary>
+	/// Dialog close callback.
+	/// </summary>
+	/// <param name="dialogResult">Dialog result.</param>
+	public delegate void DialogCallback(bool? dialogResult);
 
 	/// <summary>
 	/// Viewmodel configuring context.
 	/// </summary>
 	/// <typeparam name="TViewModel">Type of viewmodel.</typeparam>
 	/// <param name="viewModel">Viewmodel to configure.</param>
-	public delegate void ConfigureContext<TViewModel>(TViewModel viewModel);
+	public delegate void ConfigureContext<TViewModel>(TViewModel viewModel)
+		where TViewModel : ViewModel;
 
 	/// <summary>
 	/// Record of dialog result and its return value.
@@ -35,8 +41,12 @@ namespace Synergy.WPF.Navigation.Services.Dialog
 		/// <typeparam name="TViewModel">Type of viewmodel.</typeparam>
 		/// <param name="callback">Dialog close callback.</param>
 		/// <param name="configure">Viewmodel configuration.</param>
-		void Show<TViewModel>(DialogCallback? callback = null, ConfigureContext<TViewModel>? configure = null)
-			where TViewModel : DialogViewModel;
+		/// /// <param name="adjustScale">Adjust view scale to current monitor scale.</param>
+		void Show<TViewModel>(
+			DialogCallback? callback = null,
+			ConfigureContext<TViewModel>? configure = null,
+			bool adjustScale = true)
+			where TViewModel : ViewModel;
 
 		/// <summary>
 		/// Shows a dialog.
@@ -45,8 +55,12 @@ namespace Synergy.WPF.Navigation.Services.Dialog
 		/// <typeparam name="TReturn">Type of dialog return value.</typeparam>
 		/// <param name="callback">Dialog close callback.</param>
 		/// <param name="configure">Viewmodel configuration.</param>
-		/// <returns></returns>
-		DReturnValue<TReturn> Show<TViewModel, TReturn>(DialogCallback? callback = null, ConfigureContext<TViewModel>? configure = null)
-			where TViewModel : DialogViewModel<TReturn>;
+		/// <param name="adjustScale">Adjust view scale to current monitor scale.</param>
+		/// <returns>Dialog result and return value.</returns>
+		DReturnValue<TReturn> Show<TViewModel, TReturn>(
+			DialogCallback<TReturn>? callback = null,
+			ConfigureContext<TViewModel>? configure = null,
+			bool adjustScale = true)
+			where TViewModel : ViewModel;
 	}
 }
