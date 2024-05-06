@@ -18,7 +18,8 @@ namespace Synergy.WPF.Navigation.ViewModels
 	/// <summary>
 	/// Base viewmodel class.
 	/// </summary>
-	public abstract class ViewModel : ObservableRecipient, IDisposable
+	[ObservableRecipient]
+	public abstract partial class ViewModel : ObservableValidator, IDisposable
 	{
 		/// <summary>
 		/// Application dispatcher.

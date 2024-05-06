@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
@@ -6,11 +6,11 @@
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>WPF navigation</Title>
-    <Authors>Synergy</Authors>
+    <Authors>Vladislav Sidorovich</Authors>
     <RepositoryUrl>https://github.com/Speed-Fire/Synergy.WPF.Navigation</RepositoryUrl>
     <Description>This package contains services for navigation in WPF app, based on MVVM.</Description>
-    <AssemblyVersion>2.0.0</AssemblyVersion>
-    <Version>2.0.0</Version>
+    <AssemblyVersion>2.0.1</AssemblyVersion>
+    <Version>2.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
