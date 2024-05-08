@@ -29,14 +29,19 @@ namespace Synergy.WPF.Navigation.ViewModels
 		private INavigationService _navigation;
 		protected INavigationService Navigation => _navigation;
 
-		/// <summary>
-		/// Dispose.
-		/// </summary>
-		public virtual void Dispose() { }
+		public virtual void Validate()
+		{
+			ValidateAllProperties();
+		}
 
 		internal void SetNavigation(INavigationService navigation)
 		{
 			_navigation = navigation;
 		}
+
+		/// <summary>
+		/// Dispose.
+		/// </summary>
+		public virtual void Dispose() { }
 	}
 }
