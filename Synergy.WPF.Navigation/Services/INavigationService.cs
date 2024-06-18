@@ -1,5 +1,7 @@
-﻿using Synergy.WPF.Navigation.ViewModels;
+﻿using Synergy.WPF.Navigation.Services.Dialog;
+using Synergy.WPF.Navigation.ViewModels;
 using System.ComponentModel;
+using System.Windows.Controls;
 
 namespace Synergy.WPF.Navigation.Services
 {
@@ -28,5 +30,16 @@ namespace Synergy.WPF.Navigation.Services
 		/// <param name="suppressDisposing">Set true, if you don't want to dispose active viewmodel
 		/// before setting new.</param>
 		void NavigateTo(ViewModel viewModel, bool suppressDisposing = false);
+
+		void PushDialog<TViewModel>(DialogCallback? callback = null)
+			where TViewModel : ViewModel;
+		void PushDialog<TViewModel, TReturnValue>(DialogCallback<TReturnValue> callback)
+			where TViewModel : ViewModel;
+
+		void PushDialog(ViewModel dialog, DialogCallback? callback = null);
+		void PushDialog<TReturnValue>(ViewModel dialog, DialogCallback<TReturnValue> callback);
+
+		void ReleaseDialog(bool? result = null);
+		void ReleaseDialog<TReturnValue>(bool? result, TReturnValue returnValue);
 	}
 }
