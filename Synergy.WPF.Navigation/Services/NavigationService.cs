@@ -13,8 +13,7 @@ namespace Synergy.WPF.Navigation.Services
 	/// <summary>
 	/// Implementation of navigation service. Uses DI to retrieve viewmodels.
 	/// </summary>
-	public class NavigationService : 
-		ObservableObject,
+	public class NavigationService(Func<Type, ViewModel> viewModelFactory) : 
 		INavigationService
 	{
 		#region Embedded types
@@ -32,24 +31,30 @@ namespace Synergy.WPF.Navigation.Services
 
 		#endregion
 
-		private readonly Func<Type, ViewModel> _viewModelFactory;
+		private readonly Func<Type, ViewModel> _viewModelFactory = viewModelFactory;
 		private readonly Stack<PreviousVMInfo> _dialogStack = [];
 
-		private ViewModel? _currentView;
+		private ViewModel? _currentViewModel;
 
 		/// <summary>
 		/// Current viewmodel.
 		/// </summary>
 		public ViewModel? CurrentViewModel
 		{
-			get => _currentView;
-			private set => SetProperty(ref _currentView, value);
+			get => _currentViewModel;
+			private set => _currentViewModel = value;
 		}
 
-		public NavigationService(Func<Type, ViewModel> viewModelFactory)
+#nullable disable
+
+		private Action<NavigationEventArgs> _navigated;
+		event Action<NavigationEventArgs> INavigationService.Navigated
 		{
-			_viewModelFactory = viewModelFactory;
+			add => _navigated += value;
+			remove => _navigated -= value;
 		}
+
+#nullable enable
 
 		#region NavigateTo
 
@@ -62,14 +67,7 @@ namespace Synergy.WPF.Navigation.Services
 		public void NavigateTo<TViewModel>(bool suppressDisposing = false)
 			where TViewModel : ViewModel
 		{
-			var vm = _viewModelFactory?.Invoke(typeof(TViewModel));
-
-			if (CurrentViewModel != null && !suppressDisposing)
-				CurrentViewModel.Dispose();
-
-			vm?.SetNavigation(this);
-
-			CurrentViewModel = vm;
+			NavigateTo<TViewModel>(NavigationAction.CreateNew, suppressDisposing);
 		}
 
 		/// <summary>
@@ -80,12 +78,35 @@ namespace Synergy.WPF.Navigation.Services
 		/// before setting new.</param>
 		public void NavigateTo(ViewModel viewModel, bool suppressDisposing = false)
 		{
+			NavigateTo(NavigationAction.CreateNew, viewModel, suppressDisposing);
+		}
+
+		private void NavigateTo<TViewModel>(NavigationAction action, bool suppressDisposing = false)
+			where TViewModel : ViewModel
+		{
+			var vm = _viewModelFactory?.Invoke(typeof(TViewModel));
+
+			if (CurrentViewModel != null && !suppressDisposing)
+				CurrentViewModel.Dispose();
+
+			vm?.SetNavigation(this);
+
+			CurrentViewModel = vm;
+
+			InvokeNavigated(CurrentViewModel, action);
+		}
+
+		private void NavigateTo(NavigationAction action, ViewModel viewModel,
+			bool suppressDisposing = false)
+		{
 			if (CurrentViewModel != null && !suppressDisposing)
 				CurrentViewModel.Dispose();
 
 			viewModel?.SetNavigation(this);
 
 			CurrentViewModel = viewModel;
+
+			InvokeNavigated(CurrentViewModel, action);
 		}
 
 		#endregion
@@ -153,13 +174,13 @@ namespace Synergy.WPF.Navigation.Services
 			where TViewModel : ViewModel
 		{
 			_dialogStack.Push(prevInfo);
-			this.NavigateTo<TViewModel>(true);
+			this.NavigateTo<TViewModel>(NavigationAction.PushToStack, true);
 		}
 
 		private void PushDialog(ViewModel vm, PreviousVMInfo prevInfo)
 		{
 			_dialogStack.Push(prevInfo);
-			this.NavigateTo(vm, true);
+			this.NavigateTo(NavigationAction.PushToStack, vm, true);
 		}
 
 		#endregion
@@ -173,7 +194,7 @@ namespace Synergy.WPF.Navigation.Services
 
 			var info = _dialogStack.Pop();
 
-			this.NavigateTo(info.ViewModel);
+			this.NavigateTo(NavigationAction.ReleaseFromStack, info.ViewModel);
 
 			if (info.Callback is null)
 				return;
@@ -190,10 +211,15 @@ namespace Synergy.WPF.Navigation.Services
 			if (info is null)
 				throw new InvalidOperationException("Callback for such type of return value is not registered!");
 
-			this.NavigateTo(info.ViewModel);
+			this.NavigateTo(NavigationAction.ReleaseFromStack, info.ViewModel);
 			info.ParametrizedCallback.Invoke(new DReturnValue<TReturnValue>(result, returnValue));
 		}
 
 		#endregion
+
+		private void InvokeNavigated(ViewModel? vm, NavigationAction action)
+		{
+			_navigated?.Invoke(new(vm, action));
+		}
 	}
 }

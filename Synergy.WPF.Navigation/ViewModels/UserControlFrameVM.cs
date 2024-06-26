@@ -2,6 +2,7 @@
 using Synergy.WPF.Navigation.Extensions;
 using Synergy.WPF.Navigation.Services;
 using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
 
 namespace Synergy.WPF.Navigation.ViewModels
@@ -11,6 +12,8 @@ namespace Synergy.WPF.Navigation.ViewModels
 		private readonly INavigationService _navigation;
 		private readonly IServiceProvider _serviceProvider;
 
+		private readonly Stack<UserControl> _userControlStack = [];
+
 		[ObservableProperty]
 		private UserControl? _currentView;
 
@@ -19,37 +22,48 @@ namespace Synergy.WPF.Navigation.ViewModels
 		{
 			_navigation = navigation;
 
-			_navigation.PropertyChanged += Navigation_PropertyChanged;
+			_navigation.Navigated += Navigation_Navigated;
 			_serviceProvider = serviceProvider;
 		}
 
-		private void Navigation_PropertyChanged(object? sender,
-			System.ComponentModel.PropertyChangedEventArgs e)
+		private void Navigation_Navigated(NavigationEventArgs e)
 		{
-			if (e.PropertyName == nameof(INavigationService.CurrentViewModel))
+			var vm = e.NewViewModel;
+
+			if (CurrentView is not null && e.NavigationAction != NavigationAction.PushToStack)
 			{
-				var vm = _navigation.CurrentViewModel;
+				CurrentView.DataContext = null;
+				CurrentView = null;
+			}
 
-				if (CurrentView is not null)
+			if(e.NavigationAction == NavigationAction.PushToStack)
+			{
+				if (CurrentView is null)
+					throw new InvalidOperationException("There is no CurrentView to push to stack!");
+
+				_userControlStack.Push(CurrentView);
+			}
+
+			if(e.NavigationAction == NavigationAction.ReleaseFromStack)
+			{
+				if (_userControlStack.Count == 0)
+					throw new InvalidOperationException("UserControl stack is empty!");
+
+				CurrentView = _userControlStack.Pop();
+			}
+			else if (vm is not null)
+			{
+				var vmType = vm.GetType();
+
+				if (!vmType.IsDerivedFromGenericType(typeof(ViewModel<>)) ||
+					vmType.BaseType is null)
+					return;
+
+				var viewType = vmType.BaseType.GetGenericArguments()[0];
+
+				if ((CurrentView = UpdateCurrentView(viewType)) is not null)
 				{
-					CurrentView.DataContext = null;
-					CurrentView = null;
-				}
-
-				if (vm is not null)
-				{
-					var vmType = vm.GetType();
-
-					if (!vmType.IsDerivedFromGenericType(typeof(ViewModel<>)) ||
-						vmType.BaseType is null)
-						return;
-
-					var viewType = vmType.BaseType.GetGenericArguments()[0];
-
-					if ((CurrentView = UpdateCurrentView(viewType)) is not null)
-					{
-						CurrentView.DataContext = vm;
-					}
+					CurrentView.DataContext = vm;
 				}
 			}
 		}
@@ -78,7 +92,7 @@ namespace Synergy.WPF.Navigation.ViewModels
 
 		public override void Dispose()
 		{
-			_navigation.PropertyChanged -= Navigation_PropertyChanged;
+			_navigation.Navigated -= Navigation_Navigated;
 		}
 	}
 }

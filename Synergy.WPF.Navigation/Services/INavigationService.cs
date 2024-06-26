@@ -1,15 +1,27 @@
 ﻿using Synergy.WPF.Navigation.Services.Dialog;
 using Synergy.WPF.Navigation.ViewModels;
+using System;
 using System.ComponentModel;
 using System.Windows.Controls;
 
 namespace Synergy.WPF.Navigation.Services
 {
+	internal enum NavigationAction
+	{
+		CreateNew,
+		PushToStack,
+		ReleaseFromStack
+	}
+
+	internal record NavigationEventArgs(ViewModel? NewViewModel, NavigationAction NavigationAction);
+
 	/// <summary>
 	/// Interface for providing navigation.
 	/// </summary>
-	public interface INavigationService : INotifyPropertyChanged
+	public interface INavigationService
 	{
+		internal event Action<NavigationEventArgs> Navigated;
+
 		/// <summary>
 		/// Current viewmodel.
 		/// </summary>
