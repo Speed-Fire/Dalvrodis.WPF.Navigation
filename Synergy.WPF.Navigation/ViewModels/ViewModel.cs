@@ -43,5 +43,29 @@ namespace Synergy.WPF.Navigation.ViewModels
 		/// Dispose.
 		/// </summary>
 		public virtual void Dispose() { }
+
+		/// <summary>
+		/// Searches for specified resource in application. If resource is not found
+		///  or specified type is wrong, exception will be thrown.
+		/// </summary>
+		/// <typeparam name="T">Resource type.</typeparam>
+		/// <param name="key">Resource key.</param>
+		/// <returns>Found resource.</returns>
+		public static T GetAppResource<T>(object key)
+		{
+			return (T)Application.Current.FindResource(key);
+		}
+
+#nullable enable
+		/// <summary>
+		/// Searches for specified resource.
+		/// </summary>
+		/// <typeparam name="T">Resource type.</typeparam>
+		/// <param name="key">Resource key.</param>
+		/// <returns>Found resource or null, if not found or can't be casted to specified type.</returns>
+		public static T? TryGetAppResource<T>(object key) where T : class
+		{
+			return Application.Current.TryFindResource(key) as T;
+		}
 	}
 }
