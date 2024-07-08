@@ -28,6 +28,11 @@ namespace Synergy.WPF.Navigation.ViewModels
 
 		private void Navigation_Navigated(NavigationEventArgs e)
 		{
+			Dispatcher?.Invoke(() => NavigateView(e));
+		}
+
+		private void NavigateView(NavigationEventArgs e)
+		{
 			var vm = e.NewViewModel;
 
 			if (CurrentView is not null && e.NavigationAction != NavigationAction.PushToStack)
@@ -36,7 +41,7 @@ namespace Synergy.WPF.Navigation.ViewModels
 				CurrentView = null;
 			}
 
-			if(e.NavigationAction == NavigationAction.PushToStack)
+			if (e.NavigationAction == NavigationAction.PushToStack)
 			{
 				if (CurrentView is null)
 					throw new InvalidOperationException("There is no CurrentView to push to stack!");
@@ -44,7 +49,7 @@ namespace Synergy.WPF.Navigation.ViewModels
 				_userControlStack.Push(CurrentView);
 			}
 
-			if(e.NavigationAction == NavigationAction.ReleaseFromStack)
+			if (e.NavigationAction == NavigationAction.ReleaseFromStack)
 			{
 				if (_userControlStack.Count == 0)
 					throw new InvalidOperationException("UserControl stack is empty!");
