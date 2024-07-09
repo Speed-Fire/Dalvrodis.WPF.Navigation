@@ -76,7 +76,7 @@ namespace Synergy.WPF.Navigation.Services
 		/// <param name="viewModel">Instance of viewmodel.</param>
 		/// <param name="suppressDisposing">Set true, if you don't want to dispose active viewmodel
 		/// before setting new.</param>
-		public void NavigateTo(ViewModel viewModel, bool suppressDisposing = false)
+		public void NavigateTo(ViewModel? viewModel, bool suppressDisposing = false)
 		{
 			NavigateTo(NavigationAction.CreateNew, viewModel, suppressDisposing);
 		}
@@ -96,7 +96,7 @@ namespace Synergy.WPF.Navigation.Services
 			InvokeNavigated(CurrentViewModel, action);
 		}
 
-		private void NavigateTo(NavigationAction action, ViewModel viewModel,
+		private void NavigateTo(NavigationAction action, ViewModel? viewModel,
 			bool suppressDisposing = false)
 		{
 			if (CurrentViewModel != null && !suppressDisposing)

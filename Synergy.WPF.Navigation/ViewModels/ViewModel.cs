@@ -24,7 +24,7 @@ namespace Synergy.WPF.Navigation.ViewModels
 		/// <summary>
 		/// Application dispatcher.
 		/// </summary>
-		public static Dispatcher Dispatcher => Application.Current.Dispatcher;
+		public static Dispatcher Dispatcher => Application.Current?.Dispatcher;
 
 		private INavigationService _navigation;
 		protected INavigationService Navigation => _navigation;
