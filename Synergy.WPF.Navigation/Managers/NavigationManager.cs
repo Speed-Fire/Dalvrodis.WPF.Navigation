@@ -91,8 +91,11 @@ namespace Synergy.WPF.Navigation.Managers
 
 			if (channel.Frame is not null)
 			{
-				Dispatcher?.Invoke(() => channel.Attacher?.Detach(channel.Frame));
-				channel.Frame.DataContext = null;
+				Dispatcher?.Invoke(() =>
+				{
+					channel.Attacher?.Detach(channel.Frame);
+					channel.Frame.DataContext = null;
+				});
 			}
 
 			channel.FrameVM?.Dispose();
