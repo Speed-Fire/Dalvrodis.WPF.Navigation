@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using Synergy.WPF.Navigation.Managers;
 using Synergy.WPF.Navigation.Messages;
 using Synergy.WPF.Navigation.Misc;
 using Synergy.WPF.Navigation.Services.Dialog;
@@ -13,8 +14,7 @@ namespace Synergy.WPF.Navigation.Services
 	/// <summary>
 	/// Implementation of navigation service. Uses DI to retrieve viewmodels.
 	/// </summary>
-	public class NavigationService(Func<Type, ViewModel> viewModelFactory) : 
-		INavigationService
+	public sealed class NavigationService : INavigationService
 	{
 		#region Embedded types
 
@@ -31,7 +31,9 @@ namespace Synergy.WPF.Navigation.Services
 
 		#endregion
 
-		private readonly Func<Type, ViewModel> _viewModelFactory = viewModelFactory;
+		private readonly NavigationManager _navigationManager;
+		private readonly object _key;
+		private readonly Func<Type, ViewModel> _viewModelFactory;
 		private readonly Stack<PreviousVMInfo> _dialogStack = [];
 
 		private ViewModel? _currentViewModel;
@@ -56,15 +58,27 @@ namespace Synergy.WPF.Navigation.Services
 
 #nullable enable
 
-		#region NavigateTo
+        public NavigationService(
+			NavigationManager manager,
+			Func<Type, ViewModel> viewModelFactory,
+			object key)
+        {
+            _viewModelFactory = viewModelFactory;
+			_navigationManager = manager;
+			_key = key;
 
-		/// <summary>
-		/// Navigates to viewmodel via type.
-		/// </summary>
-		/// <typeparam name="TViewModel">Type of viewmodel.</typeparam>
-		/// <param name="suppressDisposing">Set true, if you don't want to dispose active viewmodel
-		/// before setting new.</param>
-		public void NavigateTo<TViewModel>(bool suppressDisposing = false)
+			_navigationManager.Attach(key, this);
+        }
+
+        #region NavigateTo
+
+        /// <summary>
+        /// Navigates to viewmodel via type.
+        /// </summary>
+        /// <typeparam name="TViewModel">Type of viewmodel.</typeparam>
+        /// <param name="suppressDisposing">Set true, if you don't want to dispose active viewmodel
+        /// before setting new.</param>
+        public void NavigateTo<TViewModel>(bool suppressDisposing = false)
 			where TViewModel : ViewModel
 		{
 			NavigateTo<TViewModel>(NavigationAction.CreateNew, suppressDisposing);
@@ -220,6 +234,11 @@ namespace Synergy.WPF.Navigation.Services
 		private void InvokeNavigated(ViewModel? vm, NavigationAction action)
 		{
 			_navigated?.Invoke(new(vm, action));
+		}
+
+		public void Dispose()
+		{
+			_navigationManager.Detach(_key);
 		}
 	}
 }

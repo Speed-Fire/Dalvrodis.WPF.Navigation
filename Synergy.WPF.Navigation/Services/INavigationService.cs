@@ -18,7 +18,7 @@ namespace Synergy.WPF.Navigation.Services
 	/// <summary>
 	/// Interface for providing navigation.
 	/// </summary>
-	public interface INavigationService
+	public interface INavigationService : IDisposable
 	{
 		internal event Action<NavigationEventArgs> Navigated;
 

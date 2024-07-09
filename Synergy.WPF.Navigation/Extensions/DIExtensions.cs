@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Synergy.WPF.Navigation.Components;
+using Synergy.WPF.Navigation.Managers;
 using Synergy.WPF.Navigation.Misc;
 using Synergy.WPF.Navigation.Services;
 using Synergy.WPF.Navigation.Services.Dialog;
 using Synergy.WPF.Navigation.ViewModels;
+using System;
 using System.Linq;
 
 namespace Synergy.WPF.Navigation.Extensions
@@ -30,44 +32,15 @@ namespace Synergy.WPF.Navigation.Extensions
 		private static IServiceCollection RegisterNavigationServices(this IServiceCollection services)
 		{
 			services
-				.AddKeyedSingleton<INavigationService, NavigationService>(NavConsts.SINGLETON_SERVICE,
-				(provider, key) =>
+				.AddKeyedSingleton<INavigationService, NavigationService>(
+					NavConsts.SINGLETON_SERVICE,
+					(provider, key) => CreateNavigationService(provider, key, NavConsts.MAIN_NAVIGATION_CHANNEL))
+				.AddTransient<Func<object, INavigationService>>(provider => channel =>
 				{
-					return new NavigationService(type =>
-					{
-						var vm = (ViewModel?)provider.GetKeyedServices(type, key).FirstOrDefault();
+					if (channel is string str && str == NavConsts.MAIN_NAVIGATION_CHANNEL)
+						throw new InvalidOperationException($"Channel \"{NavConsts.MAIN_NAVIGATION_CHANNEL}\" is preserved for singleton navigation service!");
 
-						if (vm is null)
-							vm = (ViewModel)provider.GetRequiredService(type);
-
-						return vm;
-					});
-				})
-				.AddKeyedScoped<INavigationService, NavigationService>(NavConsts.SCOPED_SERVICE,
-				(provider, key) =>
-				{
-					return new NavigationService(type =>
-					{
-						var vm = (ViewModel?)provider.GetKeyedServices(type, key).FirstOrDefault();
-
-						if (vm is null)
-							vm = (ViewModel)provider.GetRequiredService(type);
-
-						return vm;
-					});
-				})
-				.AddKeyedTransient<INavigationService>(NavConsts.TRANSIENT_SERVICE,
-				(provider, key) =>
-				{
-					return new NavigationService(type =>
-					{
-						var vm = (ViewModel?)provider.GetKeyedServices(type, key).FirstOrDefault();
-
-						if (vm is null)
-							vm = (ViewModel)provider.GetRequiredService(type);
-
-						return vm;
-					});
+					return CreateNavigationService(provider, null, channel);
 				});
 
 			return services;
@@ -76,36 +49,30 @@ namespace Synergy.WPF.Navigation.Extensions
 		private static IServiceCollection RegisterMainVM(this IServiceCollection services)
 		{
 			services
-				.AddKeyedScoped<UserControlFrame>(NavConsts.SCOPED_SERVICE,
+				.AddSingleton<NavigationManager>();
 				//.AddScoped<DialogHostViewModel>()
 				//.AddScoped<GuidWrapper>()
 				//.AddTransient<IDialogService, DialogService>();
 
-					return new(frameVm);
-				})
-				.AddKeyedScoped<UserControlFrameVM>(NavConsts.SCOPED_SERVICE,
-				(provider, key) =>
-				{
-					var navService = provider.GetRequiredKeyedService<INavigationService>(key);
-
-					return new(navService, provider);
-				})
-				.AddSingleton<UserControlFrame>()
-				.AddSingleton<UserControlFrameVM>(
-				(provider) =>
-				{
-					var navService = provider
-					.GetRequiredKeyedService<INavigationService>(NavConsts.SINGLETON_SERVICE);
-
-					return new(navService, provider);
-				});
-
-			services
-				.AddScoped<DialogHostViewModel>()
-				.AddScoped<GuidWrapper>()
-				.AddTransient<IDialogService, DialogService>();
-
 			return services;
+		}
+
+		private static NavigationService CreateNavigationService(
+			IServiceProvider provider,
+			object? key,
+			object channel)
+		{
+			Func<Type, ViewModel> factory = type =>
+			{
+				var vm = (ViewModel?)provider.GetKeyedServices(type, key).FirstOrDefault();
+
+				vm ??= (ViewModel)provider.GetRequiredService(type);
+
+				return vm;
+			};
+
+			return (NavigationService)ActivatorUtilities.CreateInstance(provider,
+				typeof(NavigationService), factory, channel);
 		}
 	}
 }
