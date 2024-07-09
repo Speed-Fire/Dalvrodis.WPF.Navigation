@@ -30,7 +30,10 @@ namespace Synergy.WPF.Navigation.Components
 					[typeof(Visual)]
 				);
 
-			removeVisualChild?.Invoke(visual, [this]);
+			if (removeVisualChild is null)
+				return;
+
+			Dispatcher?.Invoke(() => removeVisualChild?.Invoke(visual, [this]));
 		}
 	}
 }
