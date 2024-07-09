@@ -1,4 +1,5 @@
 ﻿using Synergy.WPF.Navigation.ViewModels;
+using System;
 
 namespace Synergy.WPF.Navigation.Services.Dialog
 {
@@ -33,6 +34,7 @@ namespace Synergy.WPF.Navigation.Services.Dialog
 	/// <summary>
 	/// Interface for providing dialogs to user.
 	/// </summary>
+	[Obsolete("This interface is obsolete for now and dialogs in another window cannot be created with it.")]
 	public interface IDialogService
 	{
 		/// <summary>

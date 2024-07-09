@@ -77,9 +77,9 @@ namespace Synergy.WPF.Navigation.Extensions
 		{
 			services
 				.AddKeyedScoped<UserControlFrame>(NavConsts.SCOPED_SERVICE,
-				(provider, key) =>
-				{
-					var frameVm = provider.GetRequiredKeyedService<UserControlFrameVM>(key);
+				//.AddScoped<DialogHostViewModel>()
+				//.AddScoped<GuidWrapper>()
+				//.AddTransient<IDialogService, DialogService>();
 
 					return new(frameVm);
 				})

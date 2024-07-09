@@ -9,6 +9,7 @@ using System;
 
 namespace Synergy.WPF.Navigation.Services.Dialog
 {
+	[Obsolete]
 	internal class DialogService : IDialogService
 	{
 		private readonly IServiceProvider _service;
