@@ -20,20 +20,21 @@ namespace Synergy.WPF.Navigation.Components
 
 		public void Dispose()
 		{
-			if (Parent is not Visual visual)
+			if (Parent is not FrameworkElement element)
 				return;
 			
-			var removeVisualChild = typeof(Visual)
+			var removeLogicalChild = typeof(FrameworkElement)
 				.GetMethod(
-					"RemoveVisualChild",
+					"RemoveLogicalChild",
 					System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic,
-					[typeof(Visual)]
+					[typeof(object)]
 				);
 
-			if (removeVisualChild is null)
+			if (removeLogicalChild is null)
 				return;
 
-			Dispatcher?.Invoke(() => removeVisualChild?.Invoke(visual, [this]));
+			Dispatcher?.Invoke(() => removeLogicalChild?.Invoke(element, [this]),
+				System.Windows.Threading.DispatcherPriority.ApplicationIdle);
 		}
 	}
 }
