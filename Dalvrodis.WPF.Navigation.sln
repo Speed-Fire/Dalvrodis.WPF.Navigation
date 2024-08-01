@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dalvrodis.WPF.Navigation", "Synergy.WPF.Navigation\Dalvrodis.WPF.Navigation.csproj", "{877E70D3-E151-4207-A925-D8DA7BCC5329}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dalvrodis.WPF.Navigation", "Dalvrodis.WPF.Navigation\Dalvrodis.WPF.Navigation.csproj", "{877E70D3-E151-4207-A925-D8DA7BCC5329}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
