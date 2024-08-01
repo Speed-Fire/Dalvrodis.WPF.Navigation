@@ -16,9 +16,8 @@ namespace Synergy.WPF.Navigation.ViewModels
 	}
 
 	/// <summary>
-	/// Base viewmodel class.
+	/// Base ViewModel class.
 	/// </summary>
-	[ObservableRecipient]
 	public abstract partial class ViewModel : ObservableValidator, IDisposable
 	{
 		/// <summary>
@@ -33,7 +32,7 @@ namespace Synergy.WPF.Navigation.ViewModels
 		{
 			ValidateAllProperties();
 		}
-
+		
 		internal void SetNavigation(INavigationService navigation)
 		{
 			_navigation = navigation;
