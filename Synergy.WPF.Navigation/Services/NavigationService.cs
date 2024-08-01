@@ -38,9 +38,7 @@ namespace Synergy.WPF.Navigation.Services
 
 		private ViewModel? _currentViewModel;
 
-		/// <summary>
-		/// Current viewmodel.
-		/// </summary>
+		/// <inheritdoc/>
 		public ViewModel? CurrentViewModel
 		{
 			get => _currentViewModel;
@@ -72,24 +70,14 @@ namespace Synergy.WPF.Navigation.Services
 
         #region NavigateTo
 
-        /// <summary>
-        /// Navigates to viewmodel via type.
-        /// </summary>
-        /// <typeparam name="TViewModel">Type of viewmodel.</typeparam>
-        /// <param name="suppressDisposing">Set true, if you don't want to dispose active viewmodel
-        /// before setting new.</param>
+		/// <inheritdoc/>
         public void NavigateTo<TViewModel>(bool suppressDisposing = false)
 			where TViewModel : ViewModel
 		{
 			NavigateTo<TViewModel>(NavigationAction.CreateNew, suppressDisposing);
 		}
 
-		/// <summary>
-		/// Navigates to viewmodel via instance.
-		/// </summary>
-		/// <param name="viewModel">Instance of viewmodel.</param>
-		/// <param name="suppressDisposing">Set true, if you don't want to dispose active viewmodel
-		/// before setting new.</param>
+		/// <inheritdoc/>
 		public void NavigateTo(ViewModel? viewModel, bool suppressDisposing = false)
 		{
 			NavigateTo(NavigationAction.CreateNew, viewModel, suppressDisposing);
@@ -127,6 +115,7 @@ namespace Synergy.WPF.Navigation.Services
 
 		#region PushDialog
 
+		/// <inheritdoc/>
 		public void PushDialog<TViewModel>(DialogCallback? callback = null) where TViewModel : ViewModel
 		{
 			if (CurrentViewModel is null)
@@ -141,6 +130,7 @@ namespace Synergy.WPF.Navigation.Services
 			PushDialog<TViewModel>(info);
 		}
 
+		/// <inheritdoc/>
 		public void PushDialog<TViewModel, TReturnValue>(DialogCallback<TReturnValue> callback)
 			where TViewModel : ViewModel
 		{
@@ -156,6 +146,7 @@ namespace Synergy.WPF.Navigation.Services
 			PushDialog<TViewModel>(info);
 		}
 
+		/// <inheritdoc/>
 		public void PushDialog(ViewModel dialog, DialogCallback? callback = null)
 		{
 			if (CurrentViewModel is null)
@@ -170,6 +161,7 @@ namespace Synergy.WPF.Navigation.Services
 			PushDialog(dialog, info);
 		}
 
+		/// <inheritdoc/>
 		public void PushDialog<TReturnValue>(ViewModel dialog, DialogCallback<TReturnValue> callback)
 		{
 			if (CurrentViewModel is null)
@@ -201,6 +193,7 @@ namespace Synergy.WPF.Navigation.Services
 
 		#region ReleaseDialog
 
+		/// <inheritdoc/>
 		public void ReleaseDialog(bool? result = null)
 		{
 			if (_dialogStack.Count == 0)
@@ -216,13 +209,14 @@ namespace Synergy.WPF.Navigation.Services
 			info.Callback.Invoke(result);
 		}
 
+		/// <inheritdoc/>
 		public void ReleaseDialog<TReturnValue>(bool? result, TReturnValue returnValue)
 		{
 			if (_dialogStack.Count == 0)
 				throw new InvalidOperationException("Dialog stack is empty!");
 
-			var info = _dialogStack.Pop() as PreviousVMInfo<TReturnValue>;
-			if (info is null)
+			var data = _dialogStack.Pop();
+			if (data is not PreviousVMInfo<TReturnValue> info)
 				throw new InvalidOperationException("Callback for such type of return value is not registered!");
 
 			this.NavigateTo(NavigationAction.ReleaseFromStack, info.ViewModel);
@@ -236,6 +230,7 @@ namespace Synergy.WPF.Navigation.Services
 			_navigated?.Invoke(new(vm, action));
 		}
 
+		/// <inheritdoc/>
 		public void Dispose()
 		{
 			_navigationManager.Detach(_key);
