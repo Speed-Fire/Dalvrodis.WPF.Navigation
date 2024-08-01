@@ -13,23 +13,20 @@ namespace Synergy.WPF.Navigation.Extensions
 	public static class DIExtensions
 	{
 		/// <summary>
-		/// Register navigation.
-		/// <para>- Global navigation service.</para>
-		/// <para>- Local scoped navigation service with key "Synergy.WPF.Navigation.Local".</para>
-		/// <para>- Local transient navigation service with key "Synergy.WPF.Navigation.Local.Transient".</para>
+		/// Adds navigation service to DI.
 		/// </summary>
 		/// <param name="services"></param>
 		/// <returns></returns>
-		public static IServiceCollection RegisterSynergyWPFNavigation(this IServiceCollection services)
+		public static IServiceCollection AddNavigation(this IServiceCollection services)
 		{
 			services
-				.RegisterNavigationServices()
-				.RegisterMainVM();
+				.AddNavigationServices()
+				.AddAdditions();
 
 			return services;
 		}
 
-		private static IServiceCollection RegisterNavigationServices(this IServiceCollection services)
+		private static IServiceCollection AddNavigationServices(this IServiceCollection services)
 		{
 			services
 				.AddKeyedSingleton<INavigationService, NavigationService>(
@@ -46,7 +43,7 @@ namespace Synergy.WPF.Navigation.Extensions
 			return services;
 		}
 
-		private static IServiceCollection RegisterMainVM(this IServiceCollection services)
+		private static IServiceCollection AddAdditions(this IServiceCollection services)
 		{
 			services
 				.AddSingleton<NavigationManager>();
