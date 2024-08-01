@@ -10,7 +10,9 @@ namespace Synergy.WPF.Navigation.ViewModels
 	/// <summary>
 	/// Base dialog viewmodel class.
 	/// </summary>
-	public partial class DialogHostViewModel : ViewModel, IRecipient<DialogResultMessage>
+	[ObservableRecipient]
+	[Obsolete("This View model is currently unsupported.")]
+	internal partial class DialogHostViewModel : ViewModel, IRecipient<DialogResultMessage>
 	{
 		// Scope identifier.
 		private readonly GuidWrapper _guid;
@@ -41,8 +43,7 @@ namespace Synergy.WPF.Navigation.ViewModels
 		/// <exception cref="ArgumentNullException"></exception>
 		public void ConfigureWindow(System.Windows.Window window)
 		{
-			if (window == null)
-				throw new ArgumentNullException(nameof(window));
+			ArgumentNullException.ThrowIfNull(window);
 
 			EventHandler? closedHandler = null;
 			closedHandler = (sender, e) =>
@@ -68,9 +69,9 @@ namespace Synergy.WPF.Navigation.ViewModels
 			DialogResult = message.Value.Result;
 		}
 
-		protected override void OnActivated()
-		{
-			this.Messenger.Register(this, _guid.Guid);
-		}
+		//protected override void OnActivated()
+		//{
+		//	this.Messenger.Register(this, _guid.Guid);
+		//}
 	}
 }
