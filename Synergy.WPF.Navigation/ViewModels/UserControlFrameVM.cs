@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace Synergy.WPF.Navigation.ViewModels
 {
-	public partial class UserControlFrameVM : ViewModel
+	public sealed partial class UserControlFrameVM : ViewModel
 	{
 		private readonly INavigationService _navigation;
 		private readonly IServiceProvider _serviceProvider;
