@@ -8,9 +8,11 @@
     <Title>WPF navigation</Title>
     <Authors>Vladislav Sidorovich</Authors>
     <RepositoryUrl>https://github.com/Speed-Fire/Synergy.WPF.Navigation</RepositoryUrl>
-    <Description>This package contains services for navigation in WPF app, based on MVVM.</Description>
+    <Description>The library for navigation in WPF MVVM applications.</Description>
     <AssemblyVersion>3.0.2</AssemblyVersion>
     <Version>3.0.2</Version>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageTags>WPF MVVM Navigation</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
