@@ -1,4 +1,4 @@
-﻿using Synergy.WPF.Navigation.Services.Dialog;
+﻿using Dalvrodis.WPF.Navigation.Misc;
 using Synergy.WPF.Navigation.ViewModels;
 using System;
 using System.ComponentModel;

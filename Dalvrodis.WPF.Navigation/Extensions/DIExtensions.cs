@@ -3,7 +3,6 @@ using Synergy.WPF.Navigation.Components;
 using Synergy.WPF.Navigation.Managers;
 using Synergy.WPF.Navigation.Misc;
 using Synergy.WPF.Navigation.Services;
-using Synergy.WPF.Navigation.Services.Dialog;
 using Synergy.WPF.Navigation.ViewModels;
 using System;
 using System.Linq;
@@ -47,9 +46,6 @@ namespace Synergy.WPF.Navigation.Extensions
 		{
 			services
 				.AddSingleton<NavigationManager>();
-				//.AddScoped<DialogHostViewModel>()
-				//.AddScoped<GuidWrapper>()
-				//.AddTransient<IDialogService, DialogService>();
 
 			return services;
 		}
