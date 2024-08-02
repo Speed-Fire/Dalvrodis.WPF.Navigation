@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Synergy.WPF.Navigation.Components;
-using Synergy.WPF.Navigation.Managers;
-using Synergy.WPF.Navigation.Misc;
-using Synergy.WPF.Navigation.Services;
-using Synergy.WPF.Navigation.ViewModels;
+using Dalvrodis.WPF.Navigation.Components;
+using Dalvrodis.WPF.Navigation.Managers;
+using Dalvrodis.WPF.Navigation.Misc;
+using Dalvrodis.WPF.Navigation.Services;
+using Dalvrodis.WPF.Navigation.ViewModels;
 using System;
 using System.Linq;
 
-namespace Synergy.WPF.Navigation.Extensions
+namespace Dalvrodis.WPF.Navigation.Extensions
 {
 	public static class DIExtensions
 	{
@@ -37,6 +37,14 @@ namespace Synergy.WPF.Navigation.Extensions
 						throw new InvalidOperationException($"Channel \"{NavConsts.MAIN_NAVIGATION_CHANNEL}\" is preserved for singleton navigation service!");
 
 					return CreateNavigationService(provider, null, channel);
+				});
+
+			services
+				.AddSingleton<UserControlFrame>(provider =>
+				{
+					var manager = provider.GetRequiredService<NavigationManager>();
+
+					return manager.CreateMainNavigationFrame();
 				});
 
 			return services;

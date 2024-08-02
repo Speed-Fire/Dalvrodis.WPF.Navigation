@@ -1,10 +1,10 @@
 ﻿using Dalvrodis.WPF.Navigation.Misc;
-using Synergy.WPF.Navigation.ViewModels;
+using Dalvrodis.WPF.Navigation.ViewModels;
 using System;
 using System.ComponentModel;
 using System.Windows.Controls;
 
-namespace Synergy.WPF.Navigation.Services
+namespace Dalvrodis.WPF.Navigation.Services
 {
 	internal enum NavigationAction
 	{

@@ -1,15 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using Synergy.WPF.Navigation.Managers;
-using Synergy.WPF.Navigation.Messages;
-using Synergy.WPF.Navigation.Misc;
-using Synergy.WPF.Navigation.Services.Dialog;
-using Synergy.WPF.Navigation.ViewModels;
+using Dalvrodis.WPF.Navigation.Misc;
+using Dalvrodis.WPF.Navigation.Managers;
+using Dalvrodis.WPF.Navigation.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 
-namespace Synergy.WPF.Navigation.Services
+namespace Dalvrodis.WPF.Navigation.Services
 {
 	/// <summary>
 	/// Implementation of navigation service. Uses DI to retrieve viewmodels.

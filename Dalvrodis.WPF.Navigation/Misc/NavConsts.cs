@@ -1,4 +1,4 @@
-﻿namespace Synergy.WPF.Navigation.Misc
+﻿namespace Dalvrodis.WPF.Navigation.Misc
 {
 	public static class NavConsts
 	{

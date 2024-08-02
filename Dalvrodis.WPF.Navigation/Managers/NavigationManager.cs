@@ -1,6 +1,8 @@
-﻿using Synergy.WPF.Navigation.Components;
-using Synergy.WPF.Navigation.Services;
-using Synergy.WPF.Navigation.ViewModels;
+﻿using Dalvrodis.WPF.Navigation.Components;
+using Dalvrodis.WPF.Navigation.Misc;
+using Dalvrodis.WPF.Navigation.Services;
+using Dalvrodis.WPF.Navigation.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace Synergy.WPF.Navigation.Managers
+namespace Dalvrodis.WPF.Navigation.Managers
 {
 	public class NavigationManager(IServiceProvider services)
 	{
@@ -134,6 +136,18 @@ namespace Synergy.WPF.Navigation.Managers
 
 					return existing;
 				});
+		}
+
+		internal UserControlFrame CreateMainNavigationFrame()
+		{
+			var mainNavigation = _services
+				.GetRequiredKeyedService<INavigationService>(NavConsts.SINGLETON_SERVICE);
+
+			var key = NavConsts.MAIN_NAVIGATION_CHANNEL;
+
+			Attach(key, _ => { }, _ => { });
+
+			return _channels[key].Frame!;
 		}
 	}
 }

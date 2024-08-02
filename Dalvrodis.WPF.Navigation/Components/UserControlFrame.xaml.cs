@@ -1,10 +1,10 @@
-﻿using Synergy.WPF.Navigation.ViewModels;
+﻿using Dalvrodis.WPF.Navigation.ViewModels;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Synergy.WPF.Navigation.Components
+namespace Dalvrodis.WPF.Navigation.Components
 {
 	/// <summary>
 	/// Логика взаимодействия для UserControlFrame.xaml

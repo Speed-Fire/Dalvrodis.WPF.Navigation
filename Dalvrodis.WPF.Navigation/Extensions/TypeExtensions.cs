@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Synergy.WPF.Navigation.Extensions
+namespace Dalvrodis.WPF.Navigation.Extensions
 {
 	internal static class TypeExtensions
 	{

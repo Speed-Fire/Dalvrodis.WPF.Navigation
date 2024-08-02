@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Synergy.WPF.Navigation.Services;
+using Dalvrodis.WPF.Navigation.Services;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,7 +7,7 @@ using System.Windows.Threading;
 
 #nullable disable
 
-namespace Synergy.WPF.Navigation.ViewModels
+namespace Dalvrodis.WPF.Navigation.ViewModels
 {
 	public abstract class ViewModel<TView> : ViewModel
 		where TView : UserControl

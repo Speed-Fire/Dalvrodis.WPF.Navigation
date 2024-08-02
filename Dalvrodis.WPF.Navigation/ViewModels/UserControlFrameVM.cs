@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Synergy.WPF.Navigation.Extensions;
-using Synergy.WPF.Navigation.Services;
+using Dalvrodis.WPF.Navigation.Extensions;
+using Dalvrodis.WPF.Navigation.Services;
 using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 
-namespace Synergy.WPF.Navigation.ViewModels
+namespace Dalvrodis.WPF.Navigation.ViewModels
 {
 	public sealed partial class UserControlFrameVM : ViewModel
 	{
