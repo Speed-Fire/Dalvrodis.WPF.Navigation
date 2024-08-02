@@ -141,7 +141,7 @@ namespace Dalvrodis.WPF.Navigation.Managers
 		internal UserControlFrame CreateMainNavigationFrame()
 		{
 			var mainNavigation = _services
-				.GetRequiredKeyedService<INavigationService>(NavConsts.SINGLETON_SERVICE);
+				.GetRequiredService<INavigationService>();
 
 			var key = NavConsts.MAIN_NAVIGATION_CHANNEL;
 

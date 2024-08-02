@@ -28,15 +28,14 @@ namespace Dalvrodis.WPF.Navigation.Extensions
 		private static IServiceCollection AddNavigationServices(this IServiceCollection services)
 		{
 			services
-				.AddKeyedSingleton<INavigationService, NavigationService>(
-					NavConsts.SINGLETON_SERVICE,
-					(provider, key) => CreateNavigationService(provider, key, NavConsts.MAIN_NAVIGATION_CHANNEL))
+				.AddSingleton<INavigationService, NavigationService>(
+					(provider) => CreateNavigationService(provider, NavConsts.MAIN_NAVIGATION_CHANNEL))
 				.AddTransient<Func<object, INavigationService>>(provider => channel =>
 				{
 					if (channel is string str && str == NavConsts.MAIN_NAVIGATION_CHANNEL)
 						throw new InvalidOperationException($"Channel \"{NavConsts.MAIN_NAVIGATION_CHANNEL}\" is preserved for singleton navigation service!");
 
-					return CreateNavigationService(provider, null, channel);
+					return CreateNavigationService(provider, channel);
 				});
 
 			services
@@ -60,14 +59,11 @@ namespace Dalvrodis.WPF.Navigation.Extensions
 
 		private static NavigationService CreateNavigationService(
 			IServiceProvider provider,
-			object? key,
 			object channel)
 		{
 			Func<Type, ViewModel> factory = type =>
 			{
-				var vm = (ViewModel?)provider.GetKeyedServices(type, key).FirstOrDefault();
-
-				vm ??= (ViewModel)provider.GetRequiredService(type);
+				var vm = (ViewModel)provider.GetRequiredService(type);
 
 				return vm;
 			};
