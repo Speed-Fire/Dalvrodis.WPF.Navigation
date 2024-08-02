@@ -111,7 +111,6 @@ __Navigation Service__ works in pair with __UserControlFrame__. This frame shows
 public class MainWindow : Window
 {
 	public MainWindow(
-		[FromKeyedService(Misc.NavConsts.SINGLETON_SERVICE)]
 		UserControlFrame frame)
 	{
 		this.Content = frame;
@@ -138,8 +137,7 @@ public class App : Application
 		MainWindow = window;
 
 		INavigationService globalNavigation = provider
-			.GetRequiredKeyedService<INavigationService>(
-				Misc.NavConsts.SINGLETON_SERVICE);
+			.GetRequiredService<INavigationService>();
 
 		globalNavigation.NavigateTo<MainVM>();
 
