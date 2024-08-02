@@ -8,16 +8,16 @@
     <Title>WPF navigation</Title>
     <Authors>Vladislav Sidorovich</Authors>
     <RepositoryUrl>https://github.com/Speed-Fire/Synergy.WPF.Navigation</RepositoryUrl>
-    <Description>The library for navigation in WPF MVVM applications.</Description>
-    <AssemblyVersion>3.0.2</AssemblyVersion>
-    <Version>3.0.2</Version>
+    <Description>The library for navigation in WPF MVVM applications. Adds ViewModel classes with navigation.</Description>
+    <AssemblyVersion>3.1.0</AssemblyVersion>
+    <Version>3.1.0</Version>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageTags>WPF MVVM Navigation</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
   </ItemGroup>
 
 </Project>
